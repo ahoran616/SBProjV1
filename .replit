@@ -6,7 +6,7 @@ language = "python"
 
 [nix]
 channel = "stable-24_05"
-packages = ["python311", "pip"]
+packages = ["python311", "pip", "openssh"]
 
 [deployment]
 deploymentTarget = "cloudrun"
