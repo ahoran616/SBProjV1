@@ -1,8 +1,15 @@
-entrypoint = "main.py"
+run = "streamlit run app.py"
 modules = ["python-3.11"]
+
+[packager]
+language = "python"
 
 [nix]
 channel = "stable-24_05"
+packages = ["python311", "pip"]
+
+[deployment]
+deploymentTarget = "cloudrun"
 
 [unitTest]
 language = "python3"
@@ -10,6 +17,25 @@ language = "python3"
 [gitHubImport]
 requiredFiles = [".replit", "replit.nix"]
 
-[deployment]
-run = ["python3", "main.py"]
-deploymentTarget = "cloudrun"
+[interpreter]
+entrypoint = "app.py"
+
+[[ports]]
+localPort = 8000
+externalPort = 8000
+
+[[ports]]
+localPort = 8501
+externalPort = 80
+
+[workflows]
+runButton = "Run Frontend and Backend"
+
+[[workflows.workflow]]
+name = "Run Frontend and Backend"
+mode = "parallel"
+author = 44234857
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "uvicorn backend:app --reload --host 0.0.0.0 --port 8000 & streamlit run app.py"
