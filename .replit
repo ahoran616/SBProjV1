@@ -42,12 +42,21 @@ author = 44234857
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "source .replit_bashrc"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
 args = "uvicorn backend:app --reload --host 0.0.0.0 --port 8000"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "streamlit run app.py"
+
+[[workflows.workflow]]
+name = "GitHub"
+mode = "sequential"
+author = 44234857
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "source .replit_bashrc"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "ssh-add ~/.ssh/id_ed25519"
