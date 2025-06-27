@@ -1,14 +1,12 @@
 # === 📦 IMPORTS & SETUP ===
 import os
-import json
 import requests
 import streamlit as st
+from app.config import DEV_MODE
 from openai import OpenAI
-from app.logic import get_lift_data
+from app.logic import get_lift_data, get_weather_data
 
-dev_mode = os.environ.get("DEV_MODE", "false").lower() == "true"
-
-print(f"DEV_MODE is: {dev_mode}")  # 
+print(f"DEV_MODE is: {DEV_MODE}")  # 
 
 # 🔐 OpenAI API client setup
 client = OpenAI(api_key=os.environ["openai_api_key"])
@@ -41,12 +39,9 @@ def mm_to_in(mm):
 st.set_page_config(page_title="Snowboard Conditions", layout="centered")
 st.title("🏂 Snowboard Conditions")
 st.caption("Live data from Open-Meteo + Liftie + GPT-4o Ride Recommendation")
-
-# 🛠️ Developer Mode Notice
-dev_mode = os.getenv("DEV_MODE", "false").lower() == "true"
-if dev_mode:
-    st.sidebar.markdown("⚙️ **Developer Mode Active**")
-    st.sidebar.info("Using mock data instead of live Liftie API.")
+if DEV_MODE:
+    with st.sidebar:
+        st.info("⚙️ DEV MODE ENABLED - USING MOCK DATA INSTEAD OF LIVE DATA")
     
 # ☔️ WEATHER & SNOW CONDITIONS (OPEN-METEO) + LIFT STATUS
 summary_prompt = "Here is today's snowboard mountain report:\n\n"
@@ -55,16 +50,8 @@ for name, (lat, lon) in resorts.items():
     slug = liftie_slugs.get(name)
 
     # === Weather ===
-    url = "https://api.open-meteo.com/v1/forecast"
-    params = {
-        "latitude": lat,
-        "longitude": lon,
-        "current_weather": True,
-        "daily": "snowfall_sum,snow_depth_max",
-        "timezone": "America/New_York"
-    }
-    resp = requests.get(url, params=params)
-    data = resp.json()
+
+    data = get_weather_data(name, lat, lon)
 
     cw = data.get("current_weather", {})
     daily = data.get("daily", {})
@@ -88,7 +75,7 @@ for name, (lat, lon) in resorts.items():
 
     # === Lift Status ===
     try:
-        lift_data = get_lift_data(slug, dev_mode=dev_mode)
+        lift_data = get_lift_data(slug, dev_mode=DEV_MODE)
         if not lift_data:
             st.warning(f"⚠️ No lift data available for {name}.")
             continue
