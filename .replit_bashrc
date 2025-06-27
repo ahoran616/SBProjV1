@@ -1,1 +1,2 @@
-alias gitquick="TZ='America/New_York' git add . && TZ='America/New_York' git commit -m \"Update \$(date '+%Y-%m-%d %I:%M:%S %p %Z')\" && git push"
+alias gitquick="TZ='America/New_York' git add . && TZ='America/New_York' git commit -m \"Update \$(date '+%Y-%m-%d %I:%M:%S %p EST')\" && git push"
+
