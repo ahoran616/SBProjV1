@@ -1,12 +1,15 @@
 run = "streamlit run app.py"
 modules = ["python-3.11"]
 
+[env]
+BASH_ENV = ".replit_bashrc"
+
 [packager]
 language = "python"
 
 [nix]
 channel = "stable-24_05"
-packages = ["python311", "pip", "openssh"]
+packages = ["python311", "pip", "openssh", "nano"]
 
 [deployment]
 deploymentTarget = "cloudrun"
