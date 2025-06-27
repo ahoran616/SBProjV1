@@ -1,5 +1,5 @@
 run = "bash -c 'source .replit_bashrc && uvicorn backend:app --reload & streamlit run app.py'"
-
+#test
 modules = ["python-3.11"]
 
 [env]
@@ -55,8 +55,4 @@ author = 44234857
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "source .replit_bashrc"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "ssh-add ~/.ssh/id_ed25519"
+args = "bash TZ='America/New_York' git add . && git commit -m \"Update $(date '+%Y-%m-%d %I:%M:%S %p EST')\" && git push"
