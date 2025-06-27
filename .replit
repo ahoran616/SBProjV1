@@ -1,4 +1,5 @@
-run = "streamlit run app.py"
+run = "bash -c 'source .replit_bashrc && uvicorn backend:app --reload & streamlit run app.py'"
+
 modules = ["python-3.11"]
 
 [env]
@@ -41,4 +42,12 @@ author = 44234857
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "uvicorn backend:app --reload --host 0.0.0.0 --port 8000 & streamlit run app.py"
+args = "source .replit_bashrc"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "uvicorn backend:app --reload --host 0.0.0.0 --port 8000"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run app.py"
